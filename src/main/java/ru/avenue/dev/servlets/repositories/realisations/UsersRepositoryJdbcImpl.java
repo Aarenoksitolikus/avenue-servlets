@@ -80,4 +80,8 @@ public class UsersRepositoryJdbcImpl implements UsersRepository {
     public List<User> findAllByCreateTime(Timestamp timestamp) {
         return null;
     }
+
+    private void stupidMethod() {
+        System.out.println("hello!");
+    }
 }
