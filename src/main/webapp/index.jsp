@@ -10,5 +10,6 @@
 <br/>
 <a href="hello-servlet">Hello Servlet</a>
 <a href="new">New Servlet</a>
+<a href="users">Users Servlet</a>
 </body>
 </html>

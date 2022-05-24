@@ -1,14 +1,34 @@
 package ru.avenue.dev.servlets.repositories.realisations;
 
 import ru.avenue.dev.servlets.entities.User;
+import ru.avenue.dev.servlets.repositories.templates.RowMapper;
 import ru.avenue.dev.servlets.repositories.templates.UsersRepository;
 
+import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 //dao - data access object
 public class UsersRepositoryJdbcImpl implements UsersRepository {
+
+    private final SimpleJdbcTemplate template;
+
+    RowMapper<User> rowMapper = row -> {
+        User current = new User();
+        current.setId(row.getLong("id"));
+        current.setCreateTime(row.getTimestamp("create_time"));
+        return current;
+    };
+
+    //language=SQL
+    private final String QUERY_SELECT_ALL = "SELECT * FROM account";
+
+    //language=SQL
+    private final String QUERY_SELECT_ALL_BY_CREATE_TIME = "SELECT * FROM account WHERE create_time = ?";
+
+    public UsersRepositoryJdbcImpl(DataSource dataSource) {
+        this.template = new SimpleJdbcTemplate(dataSource);
+    }
 
     @Override
     public User create(User user) {
@@ -17,48 +37,7 @@ public class UsersRepositoryJdbcImpl implements UsersRepository {
 
     @Override
     public List<User> findAll() {
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/students", "postgres", "qwerty007");
-            statement = connection.createStatement();
-            List<User> result = new ArrayList<>();
-            String sql = "SELECT * FROM account";
-            resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                User current = new User();
-                current.setId(resultSet.getLong("id"));
-                current.setCreateTime(resultSet.getTimestamp("create_time"));
-                result.add(current);
-            }
-            return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-            } catch (SQLException e) {
-                //ignore
-            }
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                //ignore
-            }
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                //ignore
-            }
-        }
+        return template.query(QUERY_SELECT_ALL, rowMapper);
     }
 
     @Override
@@ -73,15 +52,10 @@ public class UsersRepositoryJdbcImpl implements UsersRepository {
 
     @Override
     public void delete(User user) {
-
     }
 
     @Override
     public List<User> findAllByCreateTime(Timestamp timestamp) {
-        return null;
-    }
-
-    private void stupidMethod() {
-        System.out.println("hello!");
+        return template.query(QUERY_SELECT_ALL_BY_CREATE_TIME, rowMapper, timestamp);
     }
 }
