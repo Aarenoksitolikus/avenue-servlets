@@ -1,33 +1,20 @@
 package ru.avenue.dev.servlets.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
 import java.sql.Timestamp;
 
+@Data
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Builder
 public class User {
     private Long id;
+    private String login;
+    private String password;
     private Timestamp createTime;
     private Role role;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Timestamp getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Timestamp createTime) {
-        this.createTime = createTime;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }

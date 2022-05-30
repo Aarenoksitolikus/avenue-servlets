@@ -2,6 +2,8 @@ package ru.avenue.dev.servlets.listeners;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.avenue.dev.servlets.repositories.realisations.UsersRepositoryJdbcImpl;
 
 import javax.servlet.ServletContext;
@@ -30,6 +32,9 @@ public class MyServletContextListener implements ServletContextListener {
         config.setMaximumPoolSize(Integer.parseInt(properties.getProperty("db.hikari.max-pool-size")));
         HikariDataSource source = new HikariDataSource(config);
         context.setAttribute("dataSource", source);
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        context.setAttribute("passwordEncoder", passwordEncoder);
 
         context.setAttribute("usersRepository", new UsersRepositoryJdbcImpl(source));
     }

@@ -12,6 +12,13 @@
     <title>Users</title>
 </head>
 <body>
+<form method="post" action="/users">
+    <h1>${cookie.get("username").value}</h1>
+    <label>
+        <input type="text" name="user_name">
+    </label>
+    <input type="submit" value="submit">
+</form>
 <table>
     <th>ID</th>
     <th>CREATE TIME</th>

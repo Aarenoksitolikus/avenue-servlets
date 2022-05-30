@@ -10,7 +10,7 @@ import java.io.IOException;
 @WebServlet(name = "newServlet",value = "/new")
 public class NewServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("name", "Maxim");
+        request.setAttribute("name", request.getSession().getAttribute("username"));
         getServletContext().getRequestDispatcher("/new.jsp").forward(request, response);
     }
 }
